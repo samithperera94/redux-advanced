@@ -43,7 +43,11 @@ const cartLogicReducer = createSlice({
                 
             }
             state.totalQuantity --;
-        }
+        },
+        replaceCart(state, action) {
+            state.totalQuantity = action.payload.totalQuantity;
+            state.items = action.payload.items;
+          },
     }
 });
 

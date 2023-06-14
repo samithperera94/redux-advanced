@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialCartState = {
     isShown : false,
-    items : []
+    notification: null
 }
 
 const cartUIReducer = createSlice({
@@ -12,6 +12,13 @@ const cartUIReducer = createSlice({
         toggleCart(state){
             state.isShown = !state.isShown;
         },
+        showNotification(state,action){
+            state.notification = {
+                status: action.payload.status,
+                title: action.payload.title,
+                message: action.payload.message
+            }
+        }
     }
 });
 
