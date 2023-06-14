@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { cartActions } from "./cartUI";
 
 const initialCartState = {
     cartItems : [],
-    totalQuantity:0
+    totalQuantity:0,
+    changed:false
 }
 
 const cartLogicReducer = createSlice({
@@ -28,6 +28,7 @@ const cartLogicReducer = createSlice({
                 })
             }
             state.totalQuantity ++;
+            state.changed = true;
         },
         removeFromCart(state,action){
             const itemId = action.payload;
@@ -44,6 +45,7 @@ const cartLogicReducer = createSlice({
                 
             }
             state.totalQuantity --;
+            state.changed = true;
         },
         replaceCart(state, action) {
             state.totalQuantity = action.payload.totalQuantity;
@@ -52,64 +54,6 @@ const cartLogicReducer = createSlice({
     }
 });
 
-export const fetchCartData = ()=> {
-    return async(dispatch) =>{
-
-        const getData = async()=>{
-            const response = await fetch('https://react-http-d7746-default-rtdb.asia-southeast1.firebasedatabase.app/cart.json',{
-                method:'GET',
-            });
-    
-            return response.da
-        }
-
-        const responseData = await getData();
-
-        console.log("responseData ::::::",responseData);
-        
-    }
-}
-
-
-
-export const sendCartData = (cart)=> { //action creator which return a function
-    return async (dispatch) => {
-        dispatch(cartActions.showNotification({
-            status:'pending',
-            title:'Sending',
-            message:'sending cart data'
-        }));
-
-        const sendRequest = async()=> {
-            const response = await fetch('https://react-http-d7746-default-rtdb.asia-southeast1.firebasedatabase.app/cart.json',{
-                method:'PUT',
-                body:JSON.stringify(cart)
-            });
-        
-            if(!response.ok){
-                throw new Error("Sending Cart Data failed.");
-               
-            }
-        }
-
-        try{
-            await sendRequest();
-            dispatch(cartActions.showNotification({
-                status:'success',
-                title:'Success',
-                message:'sent cart data'
-            }));
-
-        }catch(error){
-            dispatch(cartActions.showNotification({
-                status:'error',
-                title:'Error',
-                message:'sending cart data failed'
-            }));
-        }
-       
-    }
-}
 
 export default cartLogicReducer.reducer;
 
